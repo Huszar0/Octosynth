@@ -2,13 +2,12 @@
 #![allow(unused)]
 #![allow(clippy::all)]
 
+use crate::schema::jobstat_jobs;
 use bigdecimal::BigDecimal;
 use chrono::NaiveDate;
 use chrono::NaiveDateTime;
-use crate::schema::jobstat_jobs;
 
-
-#[derive(Queryable, Debug)]
+/*#[derive(Queryable, Debug)]
 pub struct ActiveStorageAttachment {
     pub id: i64,
     pub name: String,
@@ -524,7 +523,7 @@ pub struct CoreGroupOfResearchArea {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }
-
+*/
 #[derive(Queryable, Debug)]
 pub struct CoreMember {
     pub id: i32,
@@ -538,7 +537,7 @@ pub struct CoreMember {
     pub organization_id: Option<i32>,
     pub organization_department_id: Option<i32>,
 }
-
+/*
 #[derive(Queryable, Debug)]
 pub struct CoreNoticeShowOption {
     pub id: i64,
@@ -566,7 +565,7 @@ pub struct CoreNotice {
     pub show_till: Option<NaiveDateTime>,
     pub active: Option<i32>,
 }
-
+*/
 #[derive(Queryable, Debug)]
 pub struct CoreOrganizationDepartment {
     pub id: i32,
@@ -605,7 +604,7 @@ pub struct CorePartition {
     pub cluster_id: Option<i32>,
     pub resources: Option<String>,
 }
-
+/*
 #[derive(Queryable, Debug)]
 pub struct CoreProjectCard {
     pub id: i32,
@@ -636,6 +635,7 @@ pub struct CoreProjectInvitation {
     pub updated_at: Option<NaiveDateTime>,
     pub language: Option<String>,
 }
+*/
 
 #[derive(Queryable, Debug)]
 pub struct CoreProjectKind {
@@ -643,7 +643,6 @@ pub struct CoreProjectKind {
     pub name_ru: Option<String>,
     pub name_en: Option<String>,
 }
-
 #[derive(Queryable, Debug)]
 pub struct CoreProject {
     pub id: i32,
@@ -658,7 +657,7 @@ pub struct CoreProject {
     pub finished_at: Option<NaiveDateTime>,
     pub estimated_finish_date: Option<NaiveDateTime>,
 }
-
+/*
 #[derive(Queryable, Debug)]
 pub struct CoreQuotaKind {
     pub id: i32,
@@ -897,7 +896,7 @@ pub struct JobstatJobMailFilter {
     pub condition: Option<String>,
     pub user_id: Option<i32>,
 }
-
+*/
 
 #[derive(Queryable, Debug, Insertable)]
 pub struct JobstatJob {
@@ -921,6 +920,7 @@ pub struct JobstatJob {
     pub initiator_id: Option<i32>,
 }
 
+/*
 #[derive(Queryable, Debug)]
 pub struct JobstatStringData {
     pub id: i32,
@@ -1490,3 +1490,4 @@ pub struct WikiplusPage {
     pub mainpage_id: Option<i32>,
     pub image: Option<String>,
 }
+*/

@@ -10,12 +10,12 @@ use diesel::prelude::*;
 use dotenvy::dotenv;
 use std::env;
 
+mod mock;
 mod models;
 mod schema;
-
+use crate::schema::jobstat_jobs;
 use models::JobstatJob;
 use schema::jobstat_jobs::dsl::*;
-use crate::schema::jobstat_jobs;
 
 pub fn establish_connection(database_url: &str) -> PgConnection {
     dotenv().ok();
@@ -23,9 +23,6 @@ pub fn establish_connection(database_url: &str) -> PgConnection {
     PgConnection::establish(&database_url)
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
-
-
-
 
 fn main() {
     let mut connection_in = establish_connection("DATABASE_IN_URL");

@@ -1,6 +1,6 @@
 // @generated automatically by Diesel CLI.
 
-diesel::table! {
+/*diesel::table! {
     active_storage_attachments (id) {
         id -> Int8,
         name -> Varchar,
@@ -563,7 +563,7 @@ diesel::table! {
         updated_at -> Timestamp,
     }
 }
-
+*/
 diesel::table! {
     core_members (id) {
         id -> Int4,
@@ -578,7 +578,7 @@ diesel::table! {
         organization_department_id -> Nullable<Int4>,
     }
 }
-
+/*
 diesel::table! {
     core_notice_show_options (id) {
         id -> Int8,
@@ -692,7 +692,7 @@ diesel::table! {
         name_en -> Nullable<Varchar>,
     }
 }
-
+*/
 diesel::table! {
     core_projects (id) {
         id -> Int4,
@@ -708,7 +708,7 @@ diesel::table! {
         estimated_finish_date -> Nullable<Timestamp>,
     }
 }
-
+/*
 diesel::table! {
     core_quota_kinds (id) {
         id -> Int4,
@@ -970,7 +970,7 @@ diesel::table! {
         user_id -> Nullable<Int4>,
     }
 }
-
+*/
 diesel::table! {
     jobstat_jobs (id) {
         id -> Int4,
@@ -993,7 +993,7 @@ diesel::table! {
         initiator_id -> Nullable<Int4>,
     }
 }
-
+/*
 diesel::table! {
     jobstat_string_data (id) {
         id -> Int4,
@@ -1746,3 +1746,4 @@ diesel::allow_tables_to_appear_in_same_query!(
     wikiplus_images,
     wikiplus_pages,
 );
+*/
