@@ -608,7 +608,7 @@ diesel::table! {
         active -> Nullable<Int4>,
     }
 }
-
+*/
 diesel::table! {
     core_organization_departments (id) {
         id -> Int4,
@@ -643,6 +643,7 @@ diesel::table! {
     }
 }
 
+/*
 diesel::table! {
     core_partitions (id) {
         id -> Int4,
@@ -951,6 +952,17 @@ diesel::table! {
         updated_at -> Timestamp,
     }
 }
+*/
+diesel::table! {
+    jobstat_string_data (id) {
+        id -> Int4,
+        name -> Nullable<Varchar>,
+        job_id -> Nullable<Int8>,
+        value -> Nullable<Varchar>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
 
 diesel::table! {
     jobstat_float_data (id) {
@@ -962,8 +974,7 @@ diesel::table! {
         updated_at -> Timestamp,
     }
 }
-
-diesel::table! {
+/*diesel::table! {
     jobstat_job_mail_filters (id) {
         id -> Int4,
         condition -> Nullable<Varchar>,
@@ -994,16 +1005,6 @@ diesel::table! {
     }
 }
 /*
-diesel::table! {
-    jobstat_string_data (id) {
-        id -> Int4,
-        name -> Nullable<Varchar>,
-        job_id -> Nullable<Int8>,
-        value -> Nullable<Varchar>,
-        created_at -> Timestamp,
-        updated_at -> Timestamp,
-    }
-}
 
 diesel::table! {
     options (id) {

@@ -15,8 +15,10 @@ mod mock;
 mod models;
 mod schema;
 mod shift_generator;
+mod synth_gen;
 
 use crate::schema::jobstat_jobs;
+use mock::Mockable;
 use models::JobstatJob;
 use schema::jobstat_jobs::dsl::*;
 

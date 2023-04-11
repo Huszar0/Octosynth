@@ -879,7 +879,7 @@ pub struct JobstatDigestStringData {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }
-
+*/
 #[derive(Queryable, Debug)]
 pub struct JobstatFloatData {
     pub id: i32,
@@ -890,6 +890,16 @@ pub struct JobstatFloatData {
     pub updated_at: NaiveDateTime,
 }
 
+#[derive(Queryable, Debug)]
+pub struct JobstatStringData {
+    pub id: i32,
+    pub name: Option<String>,
+    pub job_id: Option<i64>,
+    pub value: Option<String>,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
+}
+/*
 #[derive(Queryable, Debug)]
 pub struct JobstatJobMailFilter {
     pub id: i32,
@@ -921,16 +931,6 @@ pub struct JobstatJob {
 }
 
 /*
-#[derive(Queryable, Debug)]
-pub struct JobstatStringData {
-    pub id: i32,
-    pub name: Option<String>,
-    pub job_id: Option<i64>,
-    pub value: Option<String>,
-    pub created_at: NaiveDateTime,
-    pub updated_at: NaiveDateTime,
-}
-
 #[derive(Queryable, Debug)]
 pub struct Options {
     pub id: i32,

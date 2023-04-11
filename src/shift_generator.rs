@@ -2,15 +2,17 @@ use chrono::Months;
 use rand::Rng;
 use std::collections::HashMap;
 
-const CLASS_NAMES: [&str; 8] = [
+const CLASS_NAMES: [&str; 10] = [
     "jobstat_jobs",
     "core_projects",
     "core_members",
-    "drms_job",
-    "drms_task",
-    "initiators",
-    "core_organizations",
-    "core_organization_departments",
+    "drms_jobs",
+    "drms_tasks",
+    "organizations",
+    "organization_departments",
+    "organization_kinds",
+    "jobstat_string_data", 
+    "jobstat_float_data"
 ];
 const MAX_SHIFT: i64 = 1000;
 const MIN_TIME_SHIFT: i64 = 500;
