@@ -391,7 +391,7 @@ diesel::table! {
         updated_at -> Timestamp,
     }
 }
-
+*/
 diesel::table! {
     core_cities (id) {
         id -> Int4,
@@ -401,7 +401,7 @@ diesel::table! {
         checked -> Nullable<Bool>,
     }
 }
-
+/*
 diesel::table! {
     core_cluster_logs (id) {
         id -> Int4,
@@ -437,7 +437,7 @@ diesel::table! {
         name_en -> Nullable<Varchar>,
     }
 }
-
+*/
 diesel::table! {
     core_countries (id) {
         id -> Int4,
@@ -446,7 +446,7 @@ diesel::table! {
         checked -> Nullable<Bool>,
     }
 }
-
+/*
 diesel::table! {
     core_credentials (id) {
         id -> Int4,

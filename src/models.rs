@@ -367,7 +367,7 @@ pub struct CoreBotLink {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }
-
+*/
 #[derive(Queryable, Debug)]
 pub struct CoreCity {
     pub id: i32,
@@ -376,7 +376,7 @@ pub struct CoreCity {
     pub title_en: Option<String>,
     pub checked: Option<bool>,
 }
-
+/*
 #[derive(Queryable, Debug)]
 pub struct CoreClusterLog {
     pub id: i32,
@@ -409,7 +409,7 @@ pub struct CoreCluster {
     pub available_for_work: Option<bool>,
     pub name_en: Option<String>,
 }
-
+*/
 #[derive(Queryable, Debug)]
 pub struct CoreCountry {
     pub id: i32,
@@ -417,7 +417,7 @@ pub struct CoreCountry {
     pub title_en: Option<String>,
     pub checked: Option<bool>,
 }
-
+/*
 #[derive(Queryable, Debug)]
 pub struct CoreCredential {
     pub id: i32,

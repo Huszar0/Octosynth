@@ -10,14 +10,12 @@ use diesel::prelude::*;
 use dotenvy::dotenv;
 use std::env;
 
-mod data_analyzer;
 mod mock;
 mod models;
 mod schema;
 mod shift_generator;
 mod synth_gen;
 
-use crate::schema::jobstat_jobs;
 use mock::Mockable;
 use models::JobstatJob;
 use schema::jobstat_jobs::dsl::*;
@@ -33,7 +31,6 @@ fn main() {
     let mut connection_in = establish_connection("DATABASE_IN_URL");
     let mut connection_out = establish_connection("DATABASE_OUT_URL");
     let shift_gen = shift_generator::ShiftGenerator::new();
-    let mut analyzer = data_analyzer::Analyzer::new();
 
     let mut results = jobstat_jobs
         .load::<JobstatJob>(&mut connection_in)
@@ -52,16 +49,13 @@ fn main() {
             jobs_timelimit.push(job.timelimit.unwrap() as f64);
         }
     }
-    analyzer.create_distr("timelimit", jobs_timelimit.as_slice());
-    analyzer.create_distr("num_cores", jobs_num_cores.as_slice());
-    analyzer.create_distr("num_nodes", jobs_num_nodes.as_slice());
 
     diesel::sql_query("TRUNCATE jobstat_jobs")
         .execute(&mut connection_out)
         .expect("Error truncating the table");
 
     for job in results {
-        println!("{:?}", job.mock(&analyzer, &shift_gen));
+        println!("{:?}", job.mock(&shift_gen));
     }
     /*     diesel::insert_into(jobstat_jobs::table)
     .values(&results)

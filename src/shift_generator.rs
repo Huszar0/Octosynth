@@ -6,13 +6,13 @@ const CLASS_NAMES: [&str; 10] = [
     "jobstat_jobs",
     "core_projects",
     "core_members",
-    "drms_jobs",
-    "drms_tasks",
     "organizations",
     "organization_departments",
     "organization_kinds",
-    "jobstat_string_data", 
-    "jobstat_float_data"
+    "jobstat_string_data",
+    "jobstat_float_data",
+    "core_cities",
+    "core_countries",
 ];
 const MAX_SHIFT: i64 = 1000;
 const MIN_TIME_SHIFT: i64 = 500;
