@@ -76,7 +76,7 @@ impl Mockable for CoreProject {
             organization_department_id: self
                 .organization_department_id
                 .and_then(|x| Some(x + shift_gen.id_shifts["organization_departments"] as i32)),
-            kind_id: self.kind_id, 
+            kind_id: self.kind_id,
             first_activation_at: self
                 .first_activation_at
                 .and_then(|time| time.checked_sub_months(shift_gen.time_shift)),

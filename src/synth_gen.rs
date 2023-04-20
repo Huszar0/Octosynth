@@ -3,7 +3,7 @@ use chrono::NaiveDateTime;
 use diesel::{result::Error, PgConnection};
 use serde::Deserialize;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, PartialEq, Debug)]
 struct Job {
     timelimit: i64,
     state: String,
@@ -44,7 +44,7 @@ impl Job {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, PartialEq, Debug)]
 struct Member {
     owner: bool,
     is_access_allowed: bool,
@@ -77,13 +77,13 @@ impl Member {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, PartialEq, Debug)]
 struct Project {
-    members: Vec<Member>,
     is_active: bool,
     activation_time: NaiveDateTime,
     finish_time: NaiveDateTime,
     estimated_finish_time: NaiveDateTime,
+    members: Vec<Member>,
 }
 
 impl Project {
@@ -131,7 +131,7 @@ impl CoreOrganization {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, PartialEq, Debug)]
 pub struct GenParameters {
     projects: Vec<Project>,
 }
@@ -158,7 +158,6 @@ impl GenParameters {
                 members.push(member.generate_model(member_id as i32, project_id as i32));
             }
             projects.push(project.generate_model(project_id as i32, 1));
-
         }
 
         Ok(())
@@ -166,7 +165,135 @@ impl GenParameters {
 
     pub fn create_from_json(path: &std::path::Path) -> Self {
         let data = std::fs::read_to_string(path).expect("Unable to read file");
-        let projects = serde_json::from_str(&data).expect("Undable to deserialize");
+        let projects = serde_json::from_str(&data).expect("Unable to deserialize");
         Self { projects }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_job_deserialize() {
+        let data = r#"{
+            "timelimit": 1024,
+            "state": "COMPLETED",
+            "num_cores": 8,
+            "num_nodes": 2,
+            "start_time": "2002-06-01T00:00:00",
+            "end_time": "2002-06-02T00:00:00"
+        }"#;
+        let job: Job = serde_json::from_str(data).expect("Unable to deserialize");
+        let sample_job = Job {
+            timelimit: 1024,
+            state: "COMPLETED".to_string(),
+            num_cores: 8,
+            num_nodes: 2,
+            start_time: NaiveDateTime::parse_from_str("01.06.2002 00:00:00", "%d.%m.%Y %H:%M:%S")
+                .expect("Failed to parse from str"),
+            end_time: NaiveDateTime::parse_from_str("02.06.2002 00:00:00", "%d.%m.%Y %H:%M:%S")
+                .expect("Failed to parse from str"),
+        };
+        assert_eq!(job, sample_job);
+    }
+
+    #[test]
+    fn test_member_deserialize() {
+        let data = r#"
+        {
+            "owner": true,
+            "is_access_allowed": true,
+            "organization_id": 1,
+            "user_id": 1,
+            "jobs": [
+                {
+                "timelimit": 1024,
+                "state": "COMPLETED",
+                "num_cores": 8,
+                "num_nodes": 2,
+                "start_time": "2002-06-01T00:00:00",
+                "end_time": "2002-06-02T00:00:00"
+                }
+            ]
+        }"#;
+        let member: Member = serde_json::from_str(data).expect("Unable to deserialize");
+        let sample_job = Job {
+            timelimit: 1024,
+            state: "COMPLETED".to_string(),
+            num_cores: 8,
+            num_nodes: 2,
+            start_time: NaiveDateTime::parse_from_str("01.06.2002 00:00:00", "%d.%m.%Y %H:%M:%S")
+                .expect("Failed to parse from str"),
+            end_time: NaiveDateTime::parse_from_str("02.06.2002 00:00:00", "%d.%m.%Y %H:%M:%S")
+                .expect("Failed to parse from str"),
+        };
+        let sample_member = Member {
+            owner: true,
+            is_access_allowed: true,
+            organization_id: 1,
+            user_id: 1,
+            jobs: vec![sample_job],
+        };
+        assert_eq!(member, sample_member);
+    }
+
+
+    #[test]
+    fn test_project_deserialize() {
+        let data = r#"
+        {
+            "is_active": false,
+            "activation_time": "2002-05-01T00:00:00",
+            "finish_time": "2002-07-01T00:00:00",
+            "estimated_finish_time": "2002-06-01T00:00:00",
+            "members": [
+                {
+                    "owner": true,
+                    "is_access_allowed": true,
+                    "organization_id": 1,
+                    "user_id": 1,
+                    "jobs": [
+                        {
+                        "timelimit": 1024,
+                        "state": "COMPLETED",
+                        "num_cores": 8,
+                        "num_nodes": 2,
+                        "start_time": "2002-06-01T00:00:00",
+                        "end_time": "2002-06-02T00:00:00"
+                        }
+                    ]
+                }
+            ]
+        }"#;
+        let project: Project = serde_json::from_str(data).expect("Unable to deserialize");
+        let sample_job = Job {
+            timelimit: 1024,
+            state: "COMPLETED".to_string(),
+            num_cores: 8,
+            num_nodes: 2,
+            start_time: NaiveDateTime::parse_from_str("01.06.2002 00:00:00", "%d.%m.%Y %H:%M:%S")
+                .expect("Failed to parse from str"),
+            end_time: NaiveDateTime::parse_from_str("02.06.2002 00:00:00", "%d.%m.%Y %H:%M:%S")
+                .expect("Failed to parse from str"),
+        };
+        let sample_member = Member {
+            owner: true,
+            is_access_allowed: true,
+            organization_id: 1,
+            user_id: 1,
+            jobs: vec![sample_job],
+        };
+        let sample_project = Project {
+            is_active: false,
+            activation_time: NaiveDateTime::parse_from_str("01.05.2002 00:00:00", "%d.%m.%Y %H:%M:%S")
+                .expect("Failed to parse from str"),
+            finish_time: NaiveDateTime::parse_from_str("01.07.2002 00:00:00", "%d.%m.%Y %H:%M:%S")
+                .expect("Failed to parse from str"),
+            estimated_finish_time: NaiveDateTime::parse_from_str("01.06.2002 00:00:00", "%d.%m.%Y %H:%M:%S")
+                .expect("Failed to parse from str"),
+            members: vec![sample_member]
+        };
+        assert_eq!(project, sample_project);
     }
 }
