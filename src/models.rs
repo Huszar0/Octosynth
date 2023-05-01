@@ -2,10 +2,158 @@
 #![allow(unused)]
 #![allow(clippy::all)]
 
-use crate::schema::jobstat_jobs;
+use crate::schema::*;
 use bigdecimal::BigDecimal;
 use chrono::NaiveDate;
 use chrono::NaiveDateTime;
+
+#[derive(Queryable, Debug, Insertable)]
+pub struct JobstatJob {
+    pub id: i32,
+    pub cluster: Option<String>,
+    pub drms_job_id: Option<i64>,
+    pub drms_task_id: Option<i64>,
+    pub login: Option<String>,
+    pub partition: Option<String>,
+    pub submit_time: Option<NaiveDateTime>,
+    pub start_time: Option<NaiveDateTime>,
+    pub end_time: Option<NaiveDateTime>,
+    pub timelimit: Option<i64>,
+    pub command: Option<String>,
+    pub state: Option<String>,
+    pub num_cores: Option<i64>,
+    pub num_nodes: Option<i64>,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
+    pub nodelist: Option<String>,
+    pub initiator_id: Option<i32>,
+}
+
+#[derive(Queryable, Debug, Insertable)]
+pub struct CoreOrganizationDepartment {
+    pub id: i32,
+    pub organization_id: Option<i32>,
+    pub name: Option<String>,
+    pub checked: Option<bool>,
+}
+
+#[derive(Queryable, Debug, Insertable)]
+pub struct CoreOrganizationKind {
+    pub id: i32,
+    pub name_ru: Option<String>,
+    pub departments_required: Option<bool>,
+    pub created_at: Option<NaiveDateTime>,
+    pub updated_at: Option<NaiveDateTime>,
+    pub name_en: Option<String>,
+}
+
+#[derive(Queryable, Debug, Insertable)]
+pub struct CoreOrganization {
+    pub id: i32,
+    pub name: Option<String>,
+    pub abbreviation: Option<String>,
+    pub kind_id: Option<i32>,
+    pub country_id: Option<i32>,
+    pub city_id: Option<i32>,
+    pub created_at: Option<NaiveDateTime>,
+    pub updated_at: Option<NaiveDateTime>,
+    pub checked: Option<bool>,
+}
+
+#[derive(Queryable, Debug, Insertable)]
+pub struct CoreMember {
+    pub id: i32,
+    pub user_id: i32,
+    pub project_id: i32,
+    pub owner: Option<bool>,
+    pub login: Option<String>,
+    pub project_access_state: Option<String>,
+    pub created_at: Option<NaiveDateTime>,
+    pub updated_at: Option<NaiveDateTime>,
+    pub organization_id: Option<i32>,
+    pub organization_department_id: Option<i32>,
+}
+
+#[derive(Queryable, Debug, Insertable)]
+pub struct CoreProject {
+    pub id: i32,
+    pub title: String,
+    pub state: Option<String>,
+    pub created_at: Option<NaiveDateTime>,
+    pub updated_at: Option<NaiveDateTime>,
+    pub organization_id: Option<i32>,
+    pub organization_department_id: Option<i32>,
+    pub kind_id: Option<i32>,
+    pub first_activation_at: Option<NaiveDateTime>,
+    pub finished_at: Option<NaiveDateTime>,
+    pub estimated_finish_date: Option<NaiveDateTime>,
+}
+
+#[derive(Queryable, Debug, Insertable)]
+#[diesel(table_name = core_cities)]
+pub struct CoreCity {
+    pub id: i32,
+    pub country_id: Option<i32>,
+    pub title_ru: Option<String>,
+    pub title_en: Option<String>,
+    pub checked: Option<bool>,
+}
+
+#[derive(Queryable, Debug, Insertable)]
+#[diesel(table_name = core_countries)]
+pub struct CoreCountry {
+    pub id: i32,
+    pub title_ru: Option<String>,
+    pub title_en: Option<String>,
+    pub checked: Option<bool>,
+}
+
+#[derive(Queryable, Debug, Insertable)]
+#[diesel(table_name = jobstat_float_data)]
+pub struct JobstatFloatData {
+    pub id: i32,
+    pub name: Option<String>,
+    pub job_id: Option<i64>,
+    pub value: Option<f64>,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
+}
+
+#[derive(Queryable, Debug, Insertable)]
+#[diesel(table_name = jobstat_string_data)]
+pub struct JobstatStringData {
+    pub id: i32,
+    pub name: Option<String>,
+    pub job_id: Option<i64>,
+    pub value: Option<String>,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
+}
+
+#[derive(Queryable, Debug, Insertable)]
+pub struct User {
+    pub id: i32,
+    pub email: String,
+    pub crypted_password: Option<String>,
+    pub salt: Option<String>,
+    pub created_at: Option<NaiveDateTime>,
+    pub updated_at: Option<NaiveDateTime>,
+    pub activation_state: Option<String>,
+    pub activation_token: Option<String>,
+    pub activation_token_expires_at: Option<NaiveDateTime>,
+    pub remember_me_token: Option<String>,
+    pub remember_me_token_expires_at: Option<NaiveDateTime>,
+    pub reset_password_token: Option<String>,
+    pub reset_password_token_expires_at: Option<NaiveDateTime>,
+    pub reset_password_email_sent_at: Option<NaiveDateTime>,
+    pub access_state: Option<String>,
+    pub deleted_at: Option<NaiveDateTime>,
+    pub last_login_at: Option<NaiveDateTime>,
+    pub last_logout_at: Option<NaiveDateTime>,
+    pub last_activity_at: Option<NaiveDateTime>,
+    pub last_login_from_ip_address: Option<String>,
+    pub language: Option<String>,
+}
 
 /*#[derive(Queryable, Debug)]
 pub struct ActiveStorageAttachment {
@@ -367,16 +515,7 @@ pub struct CoreBotLink {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }
-*/
-#[derive(Queryable, Debug)]
-pub struct CoreCity {
-    pub id: i32,
-    pub country_id: Option<i32>,
-    pub title_ru: Option<String>,
-    pub title_en: Option<String>,
-    pub checked: Option<bool>,
-}
-/*
+
 #[derive(Queryable, Debug)]
 pub struct CoreClusterLog {
     pub id: i32,
@@ -409,15 +548,7 @@ pub struct CoreCluster {
     pub available_for_work: Option<bool>,
     pub name_en: Option<String>,
 }
-*/
-#[derive(Queryable, Debug)]
-pub struct CoreCountry {
-    pub id: i32,
-    pub title_ru: Option<String>,
-    pub title_en: Option<String>,
-    pub checked: Option<bool>,
-}
-/*
+
 #[derive(Queryable, Debug)]
 pub struct CoreCredential {
     pub id: i32,
@@ -523,21 +654,7 @@ pub struct CoreGroupOfResearchArea {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }
-*/
-#[derive(Queryable, Debug)]
-pub struct CoreMember {
-    pub id: i32,
-    pub user_id: i32,
-    pub project_id: i32,
-    pub owner: Option<bool>,
-    pub login: Option<String>,
-    pub project_access_state: Option<String>,
-    pub created_at: Option<NaiveDateTime>,
-    pub updated_at: Option<NaiveDateTime>,
-    pub organization_id: Option<i32>,
-    pub organization_department_id: Option<i32>,
-}
-/*
+
 #[derive(Queryable, Debug)]
 pub struct CoreNoticeShowOption {
     pub id: i64,
@@ -565,37 +682,6 @@ pub struct CoreNotice {
     pub show_till: Option<NaiveDateTime>,
     pub active: Option<i32>,
 }
-*/
-#[derive(Queryable, Debug)]
-pub struct CoreOrganizationDepartment {
-    pub id: i32,
-    pub organization_id: Option<i32>,
-    pub name: Option<String>,
-    pub checked: Option<bool>,
-}
-
-#[derive(Queryable, Debug)]
-pub struct CoreOrganizationKind {
-    pub id: i32,
-    pub name_ru: Option<String>,
-    pub departments_required: Option<bool>,
-    pub created_at: Option<NaiveDateTime>,
-    pub updated_at: Option<NaiveDateTime>,
-    pub name_en: Option<String>,
-}
-
-#[derive(Queryable, Debug)]
-pub struct CoreOrganization {
-    pub id: i32,
-    pub name: Option<String>,
-    pub abbreviation: Option<String>,
-    pub kind_id: Option<i32>,
-    pub country_id: Option<i32>,
-    pub city_id: Option<i32>,
-    pub created_at: Option<NaiveDateTime>,
-    pub updated_at: Option<NaiveDateTime>,
-    pub checked: Option<bool>,
-}
 
 #[derive(Queryable, Debug)]
 pub struct CorePartition {
@@ -604,7 +690,7 @@ pub struct CorePartition {
     pub cluster_id: Option<i32>,
     pub resources: Option<String>,
 }
-/*
+
 #[derive(Queryable, Debug)]
 pub struct CoreProjectCard {
     pub id: i32,
@@ -635,29 +721,7 @@ pub struct CoreProjectInvitation {
     pub updated_at: Option<NaiveDateTime>,
     pub language: Option<String>,
 }
-*/
 
-#[derive(Queryable, Debug)]
-pub struct CoreProjectKind {
-    pub id: i32,
-    pub name_ru: Option<String>,
-    pub name_en: Option<String>,
-}
-#[derive(Queryable, Debug)]
-pub struct CoreProject {
-    pub id: i32,
-    pub title: String,
-    pub state: Option<String>,
-    pub created_at: Option<NaiveDateTime>,
-    pub updated_at: Option<NaiveDateTime>,
-    pub organization_id: Option<i32>,
-    pub organization_department_id: Option<i32>,
-    pub kind_id: Option<i32>,
-    pub first_activation_at: Option<NaiveDateTime>,
-    pub finished_at: Option<NaiveDateTime>,
-    pub estimated_finish_date: Option<NaiveDateTime>,
-}
-/*
 #[derive(Queryable, Debug)]
 pub struct CoreQuotaKind {
     pub id: i32,
@@ -879,58 +943,14 @@ pub struct JobstatDigestStringData {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }
-*/
-#[derive(Queryable, Debug)]
-pub struct JobstatFloatData {
-    pub id: i32,
-    pub name: Option<String>,
-    pub job_id: Option<i64>,
-    pub value: Option<f64>,
-    pub created_at: NaiveDateTime,
-    pub updated_at: NaiveDateTime,
-}
 
-#[derive(Queryable, Debug)]
-pub struct JobstatStringData {
-    pub id: i32,
-    pub name: Option<String>,
-    pub job_id: Option<i64>,
-    pub value: Option<String>,
-    pub created_at: NaiveDateTime,
-    pub updated_at: NaiveDateTime,
-}
-/*
 #[derive(Queryable, Debug)]
 pub struct JobstatJobMailFilter {
     pub id: i32,
     pub condition: Option<String>,
     pub user_id: Option<i32>,
 }
-*/
 
-#[derive(Queryable, Debug, Insertable)]
-pub struct JobstatJob {
-    pub id: i32,
-    pub cluster: Option<String>,
-    pub drms_job_id: Option<i64>,
-    pub drms_task_id: Option<i64>,
-    pub login: Option<String>,
-    pub partition: Option<String>,
-    pub submit_time: Option<NaiveDateTime>,
-    pub start_time: Option<NaiveDateTime>,
-    pub end_time: Option<NaiveDateTime>,
-    pub timelimit: Option<i64>,
-    pub command: Option<String>,
-    pub state: Option<String>,
-    pub num_cores: Option<i64>,
-    pub num_nodes: Option<i64>,
-    pub created_at: NaiveDateTime,
-    pub updated_at: NaiveDateTime,
-    pub nodelist: Option<String>,
-    pub initiator_id: Option<i32>,
-}
-
-/*
 #[derive(Queryable, Debug)]
 pub struct Options {
     pub id: i32,
@@ -1415,31 +1435,6 @@ pub struct UserGroup {
     pub id: i32,
     pub user_id: Option<i32>,
     pub group_id: Option<i32>,
-}
-
-#[derive(Queryable, Debug)]
-pub struct User {
-    pub id: i32,
-    pub email: String,
-    pub crypted_password: Option<String>,
-    pub salt: Option<String>,
-    pub created_at: Option<NaiveDateTime>,
-    pub updated_at: Option<NaiveDateTime>,
-    pub activation_state: Option<String>,
-    pub activation_token: Option<String>,
-    pub activation_token_expires_at: Option<NaiveDateTime>,
-    pub remember_me_token: Option<String>,
-    pub remember_me_token_expires_at: Option<NaiveDateTime>,
-    pub reset_password_token: Option<String>,
-    pub reset_password_token_expires_at: Option<NaiveDateTime>,
-    pub reset_password_email_sent_at: Option<NaiveDateTime>,
-    pub access_state: Option<String>,
-    pub deleted_at: Option<NaiveDateTime>,
-    pub last_login_at: Option<NaiveDateTime>,
-    pub last_logout_at: Option<NaiveDateTime>,
-    pub last_activity_at: Option<NaiveDateTime>,
-    pub last_login_from_ip_address: Option<String>,
-    pub language: Option<String>,
 }
 
 #[derive(Queryable, Debug)]

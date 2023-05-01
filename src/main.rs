@@ -8,17 +8,15 @@ extern crate dotenvy;
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use dotenvy::dotenv;
+use mock::fill_database;
 use std::env;
+use synth_gen::GenParameters;
 
 mod mock;
 mod models;
 mod schema;
 mod shift_generator;
 mod synth_gen;
-
-use mock::Mockable;
-use models::JobstatJob;
-use schema::jobstat_jobs::dsl::*;
 
 pub fn establish_connection(database_url: &str) -> PgConnection {
     dotenv().ok();
@@ -27,38 +25,63 @@ pub fn establish_connection(database_url: &str) -> PgConnection {
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
 
+pub fn clear_database(connection: &mut PgConnection, tables_names: &[&str]) {
+    for table_name in tables_names {
+        diesel::sql_query(format!("TRUNCATE TABLE {} CASCADE", table_name))
+            .execute(connection)
+            .expect(&("Error truncating the table".to_owned() + table_name));
+    }
+
+    
+}
+
 fn main() {
+    let args: Vec<_> = env::args().collect();
     let mut connection_in = establish_connection("DATABASE_IN_URL");
     let mut connection_out = establish_connection("DATABASE_OUT_URL");
-    let shift_gen = shift_generator::ShiftGenerator::new();
 
-    let mut results = jobstat_jobs
-        .load::<JobstatJob>(&mut connection_in)
-        .expect("Error loading members");
-    let mut jobs_num_cores = Vec::with_capacity(results.len());
-    let mut jobs_num_nodes = Vec::with_capacity(results.len());
-    let mut jobs_timelimit = Vec::with_capacity(results.len());
-    for job in results.iter() {
-        if job.num_cores.is_some() {
-            jobs_num_cores.push(job.num_cores.unwrap() as f64);
-        }
-        if job.num_nodes.is_some() {
-            jobs_num_nodes.push(job.num_nodes.unwrap() as f64);
-        }
-        if job.timelimit.is_some() {
-            jobs_timelimit.push(job.timelimit.unwrap() as f64);
-        }
+    if args.len() < 2 {
+        panic!("Set type of work trough command line arguments");
     }
+    if args[1].starts_with("d") {
+        let shift_gen = shift_generator::ShiftGenerator::new();
 
-    diesel::sql_query("TRUNCATE jobstat_jobs")
-        .execute(&mut connection_out)
-        .expect("Error truncating the table");
+        let tables_names: [&str; 10] = [
+            "core_projects",
+            "core_members",
+            "jobstat_jobs",
+            "core_organizations",
+            "core_organization_departments",
+            "core_organization_kinds",
+            "jobstat_float_data",
+            "jobstat_string_data",
+            "core_cities",
+            "core_countries",
+        ];
 
-    for job in results {
-        println!("{:?}", job.mock(&shift_gen));
+        clear_database(&mut connection_out, &tables_names);
+
+        fill_database(&mut connection_in, &mut connection_out, shift_gen);
+    } else if args[1].starts_with("s") {
+        let data = std::fs::read_to_string("./src/gen_params.json")
+            .expect("Unable to read file with parametrs");
+        let parameters: GenParameters =
+            serde_json::from_str(&data).expect("Unable to deserialize parametrs");
+
+        let tables_names: [&str; 5] = [
+            "core_projects",
+            "core_members",
+            "jobstat_jobs",
+            "core_organizations",
+            "users",
+        ];
+
+        clear_database(&mut connection_out, &tables_names);
+
+        parameters
+            .fill_database(&mut connection_out)
+            .expect("Failed to generate synthetic data");
+    } else {
+        panic!("Wrong type of work");
     }
-    /*     diesel::insert_into(jobstat_jobs::table)
-    .values(&results)
-    .execute(&mut connection_out)
-    .expect("Error saving to new database"); */
 }

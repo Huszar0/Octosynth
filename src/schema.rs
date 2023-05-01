@@ -1,5 +1,160 @@
 // @generated automatically by Diesel CLI.
 
+diesel::table! {
+    jobstat_jobs (id) {
+        id -> Int4,
+        cluster -> Nullable<Varchar>,
+        drms_job_id -> Nullable<Int8>,
+        drms_task_id -> Nullable<Int8>,
+        login -> Nullable<Varchar>,
+        partition -> Nullable<Varchar>,
+        submit_time -> Nullable<Timestamp>,
+        start_time -> Nullable<Timestamp>,
+        end_time -> Nullable<Timestamp>,
+        timelimit -> Nullable<Int8>,
+        command -> Nullable<Varchar>,
+        state -> Nullable<Varchar>,
+        num_cores -> Nullable<Int8>,
+        num_nodes -> Nullable<Int8>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+        nodelist -> Nullable<Text>,
+        initiator_id -> Nullable<Int4>,
+    }
+}
+
+diesel::table! {
+    core_projects (id) {
+        id -> Int4,
+        title -> Varchar,
+        state -> Nullable<Varchar>,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+        organization_id -> Nullable<Int4>,
+        organization_department_id -> Nullable<Int4>,
+        kind_id -> Nullable<Int4>,
+        first_activation_at -> Nullable<Timestamp>,
+        finished_at -> Nullable<Timestamp>,
+        estimated_finish_date -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
+    core_organization_departments (id) {
+        id -> Int4,
+        organization_id -> Nullable<Int4>,
+        name -> Nullable<Varchar>,
+        checked -> Nullable<Bool>,
+    }
+}
+
+diesel::table! {
+    core_organization_kinds (id) {
+        id -> Int4,
+        name_ru -> Nullable<Varchar>,
+        departments_required -> Nullable<Bool>,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+        name_en -> Nullable<Varchar>,
+    }
+}
+
+diesel::table! {
+    core_organizations (id) {
+        id -> Int4,
+        name -> Nullable<Varchar>,
+        abbreviation -> Nullable<Varchar>,
+        kind_id -> Nullable<Int4>,
+        country_id -> Nullable<Int4>,
+        city_id -> Nullable<Int4>,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+        checked -> Nullable<Bool>,
+    }
+}
+
+diesel::table! {
+    core_members (id) {
+        id -> Int4,
+        user_id -> Int4,
+        project_id -> Int4,
+        owner -> Nullable<Bool>,
+        login -> Nullable<Varchar>,
+        project_access_state -> Nullable<Varchar>,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+        organization_id -> Nullable<Int4>,
+        organization_department_id -> Nullable<Int4>,
+    }
+}
+
+diesel::table! {
+    core_cities (id) {
+        id -> Int4,
+        country_id -> Nullable<Int4>,
+        title_ru -> Nullable<Varchar>,
+        title_en -> Nullable<Varchar>,
+        checked -> Nullable<Bool>,
+    }
+}
+
+diesel::table! {
+    core_countries (id) {
+        id -> Int4,
+        title_ru -> Nullable<Varchar>,
+        title_en -> Nullable<Varchar>,
+        checked -> Nullable<Bool>,
+    }
+}
+
+diesel::table! {
+    jobstat_string_data (id) {
+        id -> Int4,
+        name -> Nullable<Varchar>,
+        job_id -> Nullable<Int8>,
+        value -> Nullable<Varchar>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    jobstat_float_data (id) {
+        id -> Int4,
+        name -> Nullable<Varchar>,
+        job_id -> Nullable<Int8>,
+        value -> Nullable<Float8>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    users (id) {
+        id -> Int4,
+        email -> Varchar,
+        crypted_password -> Nullable<Varchar>,
+        salt -> Nullable<Varchar>,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+        activation_state -> Nullable<Varchar>,
+        activation_token -> Nullable<Varchar>,
+        activation_token_expires_at -> Nullable<Timestamp>,
+        remember_me_token -> Nullable<Varchar>,
+        remember_me_token_expires_at -> Nullable<Timestamp>,
+        reset_password_token -> Nullable<Varchar>,
+        reset_password_token_expires_at -> Nullable<Timestamp>,
+        reset_password_email_sent_at -> Nullable<Timestamp>,
+        access_state -> Nullable<Varchar>,
+        deleted_at -> Nullable<Timestamp>,
+        last_login_at -> Nullable<Timestamp>,
+        last_logout_at -> Nullable<Timestamp>,
+        last_activity_at -> Nullable<Timestamp>,
+        last_login_from_ip_address -> Nullable<Varchar>,
+        language -> Nullable<Varchar>,
+    }
+}
+
 /*diesel::table! {
     active_storage_attachments (id) {
         id -> Int8,
@@ -391,17 +546,6 @@ diesel::table! {
         updated_at -> Timestamp,
     }
 }
-*/
-diesel::table! {
-    core_cities (id) {
-        id -> Int4,
-        country_id -> Nullable<Int4>,
-        title_ru -> Nullable<Varchar>,
-        title_en -> Nullable<Varchar>,
-        checked -> Nullable<Bool>,
-    }
-}
-/*
 diesel::table! {
     core_cluster_logs (id) {
         id -> Int4,
@@ -437,16 +581,6 @@ diesel::table! {
         name_en -> Nullable<Varchar>,
     }
 }
-*/
-diesel::table! {
-    core_countries (id) {
-        id -> Int4,
-        title_ru -> Nullable<Varchar>,
-        title_en -> Nullable<Varchar>,
-        checked -> Nullable<Bool>,
-    }
-}
-/*
 diesel::table! {
     core_credentials (id) {
         id -> Int4,
@@ -563,22 +697,6 @@ diesel::table! {
         updated_at -> Timestamp,
     }
 }
-*/
-diesel::table! {
-    core_members (id) {
-        id -> Int4,
-        user_id -> Int4,
-        project_id -> Int4,
-        owner -> Nullable<Bool>,
-        login -> Nullable<Varchar>,
-        project_access_state -> Nullable<Varchar>,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
-        organization_id -> Nullable<Int4>,
-        organization_department_id -> Nullable<Int4>,
-    }
-}
-/*
 diesel::table! {
     core_notice_show_options (id) {
         id -> Int8,
@@ -608,42 +726,6 @@ diesel::table! {
         active -> Nullable<Int4>,
     }
 }
-*/
-diesel::table! {
-    core_organization_departments (id) {
-        id -> Int4,
-        organization_id -> Nullable<Int4>,
-        name -> Nullable<Varchar>,
-        checked -> Nullable<Bool>,
-    }
-}
-
-diesel::table! {
-    core_organization_kinds (id) {
-        id -> Int4,
-        name_ru -> Nullable<Varchar>,
-        departments_required -> Nullable<Bool>,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
-        name_en -> Nullable<Varchar>,
-    }
-}
-
-diesel::table! {
-    core_organizations (id) {
-        id -> Int4,
-        name -> Nullable<Varchar>,
-        abbreviation -> Nullable<Varchar>,
-        kind_id -> Nullable<Int4>,
-        country_id -> Nullable<Int4>,
-        city_id -> Nullable<Int4>,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
-        checked -> Nullable<Bool>,
-    }
-}
-
-/*
 diesel::table! {
     core_partitions (id) {
         id -> Int4,
@@ -693,23 +775,7 @@ diesel::table! {
         name_en -> Nullable<Varchar>,
     }
 }
-*/
-diesel::table! {
-    core_projects (id) {
-        id -> Int4,
-        title -> Varchar,
-        state -> Nullable<Varchar>,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
-        organization_id -> Nullable<Int4>,
-        organization_department_id -> Nullable<Int4>,
-        kind_id -> Nullable<Int4>,
-        first_activation_at -> Nullable<Timestamp>,
-        finished_at -> Nullable<Timestamp>,
-        estimated_finish_date -> Nullable<Timestamp>,
-    }
-}
-/*
+
 diesel::table! {
     core_quota_kinds (id) {
         id -> Int4,
@@ -952,59 +1018,15 @@ diesel::table! {
         updated_at -> Timestamp,
     }
 }
-*/
-diesel::table! {
-    jobstat_string_data (id) {
-        id -> Int4,
-        name -> Nullable<Varchar>,
-        job_id -> Nullable<Int8>,
-        value -> Nullable<Varchar>,
-        created_at -> Timestamp,
-        updated_at -> Timestamp,
-    }
-}
 
 diesel::table! {
-    jobstat_float_data (id) {
-        id -> Int4,
-        name -> Nullable<Varchar>,
-        job_id -> Nullable<Int8>,
-        value -> Nullable<Float8>,
-        created_at -> Timestamp,
-        updated_at -> Timestamp,
-    }
-}
-/*diesel::table! {
     jobstat_job_mail_filters (id) {
         id -> Int4,
         condition -> Nullable<Varchar>,
         user_id -> Nullable<Int4>,
     }
 }
-*/
-diesel::table! {
-    jobstat_jobs (id) {
-        id -> Int4,
-        cluster -> Nullable<Varchar>,
-        drms_job_id -> Nullable<Int8>,
-        drms_task_id -> Nullable<Int8>,
-        login -> Nullable<Varchar>,
-        partition -> Nullable<Varchar>,
-        submit_time -> Nullable<Timestamp>,
-        start_time -> Nullable<Timestamp>,
-        end_time -> Nullable<Timestamp>,
-        timelimit -> Nullable<Int8>,
-        command -> Nullable<Varchar>,
-        state -> Nullable<Varchar>,
-        num_cores -> Nullable<Int8>,
-        num_nodes -> Nullable<Int8>,
-        created_at -> Timestamp,
-        updated_at -> Timestamp,
-        nodelist -> Nullable<Text>,
-        initiator_id -> Nullable<Int4>,
-    }
-}
-/*
+
 
 diesel::table! {
     options (id) {
@@ -1531,32 +1553,6 @@ diesel::table! {
         id -> Int4,
         user_id -> Nullable<Int4>,
         group_id -> Nullable<Int4>,
-    }
-}
-
-diesel::table! {
-    users (id) {
-        id -> Int4,
-        email -> Varchar,
-        crypted_password -> Nullable<Varchar>,
-        salt -> Nullable<Varchar>,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
-        activation_state -> Nullable<Varchar>,
-        activation_token -> Nullable<Varchar>,
-        activation_token_expires_at -> Nullable<Timestamp>,
-        remember_me_token -> Nullable<Varchar>,
-        remember_me_token_expires_at -> Nullable<Timestamp>,
-        reset_password_token -> Nullable<Varchar>,
-        reset_password_token_expires_at -> Nullable<Timestamp>,
-        reset_password_email_sent_at -> Nullable<Timestamp>,
-        access_state -> Nullable<Varchar>,
-        deleted_at -> Nullable<Timestamp>,
-        last_login_at -> Nullable<Timestamp>,
-        last_logout_at -> Nullable<Timestamp>,
-        last_activity_at -> Nullable<Timestamp>,
-        last_login_from_ip_address -> Nullable<Varchar>,
-        language -> Nullable<Varchar>,
     }
 }
 

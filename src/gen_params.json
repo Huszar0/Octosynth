@@ -1,0 +1,449 @@
+{"projects": [
+    {
+        "__comment": "Student's spring practicum",
+        "is_active": false,
+        "activation_time": "2022-02-01T00:00:00",
+        "finish_time": "2022-06-01T00:00:00",
+        "estimated_finish_time": "2022-06-01T00:00:00",
+        "members": [
+            {
+                "owner": true,
+                "is_access_allowed": true,
+                "organization_id": 1,
+                "user_id": 1,
+                "jobs": [
+                    {
+                    "timelimit": 900,
+                    "state": "COMPLETED",
+                    "num_cores": 8,
+                    "num_nodes": 1,
+                    "start_time": "2022-03-01T00:00:00",
+                    "end_time": "2022-03-01T00:10:00"
+                    },
+                    {
+                        "timelimit": 900,
+                        "state": "COMPLETED",
+                        "num_cores": 16,
+                        "num_nodes": 2,
+                        "start_time": "2022-03-07T00:00:00",
+                        "end_time": "2022-03-07T00:08:00"
+                    },
+                    {
+                        "timelimit": 1024,
+                        "state": "COMPLETED",
+                        "num_cores": 32,
+                        "num_nodes": 3,
+                        "start_time": "2022-03-15T00:00:00",
+                        "end_time": "2022-03-15T00:07:00"
+                    },
+                    {
+                        "timelimit": 1800,
+                        "state": "COMPLETED",
+                        "num_cores": 64,
+                        "num_nodes": 5,
+                        "start_time": "2022-04-15T00:00:00",
+                        "end_time": "2022-04-15T00:20:00"
+                    },
+                    {
+                        "timelimit": 1800,
+                        "state": "COMPLETED",
+                        "num_cores": 128,
+                        "num_nodes": 10,
+                        "start_time": "2022-05-17T00:00:00",
+                        "end_time": "2022-05-17T00:17:00"
+                    }
+                ]
+            }
+        ]
+    },
+
+    {
+        "__comment": "Student's autumn practicum",
+        "is_active": false,
+        "activation_time": "2022-09-01T00:00:00",
+        "finish_time": "2022-12-30T00:00:00",
+        "estimated_finish_time": "2022-12-30T00:00:00",
+        "members": [
+            {
+                "owner": true,
+                "is_access_allowed": true,
+                "organization_id": 1,
+                "user_id": 1,
+                "jobs": [
+                    {
+                    "timelimit": 900,
+                    "state": "COMPLETED",
+                    "num_cores": 8,
+                    "num_nodes": 1,
+                    "start_time": "2022-12-01T00:00:00",
+                    "end_time": "2022-12-01T00:10:00"
+                    },
+                    {
+                        "timelimit": 900,
+                        "state": "COMPLETED",
+                        "num_cores": 16,
+                        "num_nodes": 2,
+                        "start_time": "2022-12-01T01:00:00",
+                        "end_time": "2022-12-01T01:08:00"
+                    },
+                    {
+                        "timelimit": 1024,
+                        "state": "COMPLETED",
+                        "num_cores": 32,
+                        "num_nodes": 3,
+                        "start_time": "2022-12-01T02:00:00",
+                        "end_time": "2022-12-01T02:07:00"
+                    },
+                    {
+                        "timelimit": 1800,
+                        "state": "COMPLETED",
+                        "num_cores": 64,
+                        "num_nodes": 5,
+                        "start_time": "2022-12-01T03:00:00",
+                        "end_time": "2022-12-01T03:20:00"
+                    },
+                    {
+                        "timelimit": 1800,
+                        "state": "COMPLETED",
+                        "num_cores": 128,
+                        "num_nodes": 10,
+                        "start_time": "2022-12-01T04:00:00",
+                        "end_time": "2022-12-01T04:17:00"
+                    }
+                ]
+            }
+        ]
+    },
+
+    {
+        "__comment": "One researcher",
+        "is_active": false,
+        "activation_time": "2022-03-01T00:00:00",
+        "finish_time": "2022-11-01T00:00:00",
+        "estimated_finish_time": "2022-11-01T00:00:00",
+        "members": [
+            {
+                "owner": true,
+                "is_access_allowed": true,
+                "organization_id": 2,
+                "user_id": 2,
+                "jobs": [
+                    {
+                        "timelimit": 900,
+                        "state": "TIMEOUT",
+                        "num_cores": 42,
+                        "num_nodes": 3,
+                        "start_time": "2022-03-15T00:00:00",
+                        "end_time": "2022-03-15T00:15:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 56,
+                        "num_nodes": 4,
+                        "start_time": "2022-03-17T00:00:00",
+                        "end_time": "2022-03-17T02:00:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 56,
+                        "num_nodes": 4,
+                        "start_time": "2022-10-25T00:00:00",
+                        "end_time": "2022-10-25T02:30:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 84,
+                        "num_nodes": 6,
+                        "start_time": "2022-10-27T00:00:00",
+                        "end_time": "2022-10-27T01:30:00"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "__comment": "Small researching group",
+        "is_active": true,
+        "activation_time": "2022-01-01T00:00:00",
+        "finish_time": "1970-01-01T00:00:00",
+        "estimated_finish_time": "2024-01-01T00:00:00",
+        "members": [
+            {
+                "owner": true,
+                "is_access_allowed": true,
+                "organization_id": 2,
+                "user_id": 3,
+                "jobs": [
+                    {
+                        "timelimit": 900,
+                        "state": "FAILED",
+                        "num_cores": 42,
+                        "num_nodes": 3,
+                        "start_time": "2022-02-15T00:00:00",
+                        "end_time": "2022-02-15T00:01:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 56,
+                        "num_nodes": 4,
+                        "start_time": "2022-02-26T00:00:00",
+                        "end_time": "2022-02-26T02:00:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 112,
+                        "num_nodes": 8,
+                        "start_time": "2022-06-25T00:00:00",
+                        "end_time": "2022-06-25T02:30:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 112,
+                        "num_nodes": 8,
+                        "start_time": "2022-06-27T00:00:00",
+                        "end_time": "2022-06-27T02:30:00"
+                    }
+                ]
+            },
+            {
+                "owner": false,
+                "is_access_allowed": true,
+                "organization_id": 2,
+                "user_id": 4,
+                "jobs": [
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 56,
+                        "num_nodes": 4,
+                        "start_time": "2022-02-17T00:00:00",
+                        "end_time": "2022-02-17T02:00:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 56,
+                        "num_nodes": 4,
+                        "start_time": "2022-06-25T00:00:00",
+                        "end_time": "2022-06-25T02:30:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 84,
+                        "num_nodes": 6,
+                        "start_time": "2022-06-27T00:00:00",
+                        "end_time": "2022-06-27T01:30:00"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "__comment": "Small researching group",
+        "is_active": false,
+        "activation_time": "2022-01-01T00:00:00",
+        "finish_time": "2022-07-01T00:00:00",
+        "estimated_finish_time": "2024-01-01T00:00:00",
+        "members": [
+            {
+                "owner": true,
+                "is_access_allowed": true,
+                "organization_id": 3,
+                "user_id": 4,
+                "jobs": [
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 56,
+                        "num_nodes": 4,
+                        "start_time": "2022-06-16T00:00:00",
+                        "end_time": "2022-06-16T02:00:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 56,
+                        "num_nodes": 4,
+                        "start_time": "2022-06-25T00:00:00",
+                        "end_time": "2022-06-25T02:30:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 56,
+                        "num_nodes": 4,
+                        "start_time": "2022-06-27T00:00:00",
+                        "end_time": "2022-06-27T02:30:00"
+                    }
+                ]
+            },
+            {
+                "owner": false,
+                "is_access_allowed": true,
+                "organization_id": 3,
+                "user_id": 5,
+                "jobs": []
+            }, 
+            {
+                "owner": false,
+                "is_access_allowed": true,
+                "organization_id": 3,
+                "user_id": 6,
+                "jobs": []
+            }
+        ]
+    },
+    {
+        "__comment": "Big researching group",
+        "is_active": true,
+        "activation_time": "2022-01-01T00:00:00",
+        "finish_time": "1970-01-01T00:00:00",
+        "estimated_finish_time": "2024-01-01T00:00:00",
+        "members": [
+            {
+                "owner": true,
+                "is_access_allowed": true,
+                "organization_id": 5,
+                "user_id": 7,
+                "jobs": [
+                    {
+                        "timelimit": 900,
+                        "state": "COMPLETED",
+                        "num_cores": 42,
+                        "num_nodes": 3,
+                        "start_time": "2022-02-15T00:00:00",
+                        "end_time": "2022-02-15T00:01:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 56,
+                        "num_nodes": 4,
+                        "start_time": "2022-02-26T00:00:00",
+                        "end_time": "2022-02-26T02:00:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 112,
+                        "num_nodes": 8,
+                        "start_time": "2022-06-25T00:00:00",
+                        "end_time": "2022-06-25T02:30:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 112,
+                        "num_nodes": 8,
+                        "start_time": "2022-06-27T00:00:00",
+                        "end_time": "2022-06-27T02:30:00"
+                    }
+                ]
+            },
+            {
+                "owner": false,
+                "is_access_allowed": true,
+                "organization_id": 5,
+                "user_id": 8,
+                "jobs": [
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 56,
+                        "num_nodes": 4,
+                        "start_time": "2022-08-17T00:00:00",
+                        "end_time": "2022-08-17T02:00:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 56,
+                        "num_nodes": 4,
+                        "start_time": "2022-08-25T00:00:00",
+                        "end_time": "2022-08-25T02:30:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 84,
+                        "num_nodes": 6,
+                        "start_time": "2022-09-27T00:00:00",
+                        "end_time": "2022-09-27T01:30:00"
+                    }
+                ]
+            },
+            {
+                "owner": false,
+                "is_access_allowed": true,
+                "organization_id": 6,
+                "user_id": 9,
+                "jobs": [
+                    {
+                        "timelimit": 1800,
+                        "state": "COMPLETED",
+                        "num_cores": 28,
+                        "num_nodes": 2,
+                        "start_time": "2022-03-26T02:00:00",
+                        "end_time": "2022-03-26T02:30:00"
+                    }, 
+                    {
+                        "timelimit": 1800,
+                        "state": "COMPLETED",
+                        "num_cores": 28,
+                        "num_nodes": 2,
+                        "start_time": "2022-04-25T00:00:00",
+                        "end_time": "2022-04-25T00:30:00"
+                    }, 
+                    {
+                        "timelimit": 1800,
+                        "state": "COMPLETED",
+                        "num_cores": 42,
+                        "num_nodes": 3,
+                        "start_time": "2022-06-27T02:00:00",
+                        "end_time": "2022-06-27T02:30:00"
+                    }
+                ]
+            },
+            {
+                "owner": false,
+                "is_access_allowed": true,
+                "organization_id": 6,
+                "user_id": 10,
+                "jobs": [
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 56,
+                        "num_nodes": 4,
+                        "start_time": "2022-10-26T00:00:00",
+                        "end_time": "2022-10-26T02:00:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "FAILED",
+                        "num_cores": 112,
+                        "num_nodes": 8,
+                        "start_time": "2022-10-25T00:00:00",
+                        "end_time": "2022-10-25T02:30:00"
+                    }, 
+                    {
+                        "timelimit": 10800,
+                        "state": "COMPLETED",
+                        "num_cores": 112,
+                        "num_nodes": 8,
+                        "start_time": "2022-10-27T00:00:00",
+                        "end_time": "2022-10-27T02:30:00"
+                    }
+                ]
+            }
+        ]
+    }
+
+]}

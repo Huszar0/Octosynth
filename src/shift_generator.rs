@@ -15,8 +15,8 @@ const CLASS_NAMES: [&str; 10] = [
     "core_countries",
 ];
 const MAX_SHIFT: i64 = 1000;
-const MIN_TIME_SHIFT: i64 = 500;
-const MAX_TIME_SHIFT: i64 = 1000;
+const MIN_TIME_SHIFT: i64 = 5;
+const MAX_TIME_SHIFT: i64 = 500;
 pub struct ShiftGenerator {
     pub id_shifts: HashMap<&'static str, i64>,
     pub time_shift: Months,
@@ -33,19 +33,6 @@ impl ShiftGenerator {
         Self {
             id_shifts,
             time_shift,
-        }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_gen() {
-        let gen = ShiftGenerator::new();
-        for (k, v) in gen.id_shifts {
-            println!("{} {}", k, v)
         }
     }
 }

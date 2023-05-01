@@ -1,5 +1,8 @@
+use std::collections::HashMap;
+
 use crate::models::*;
 use chrono::NaiveDateTime;
+use diesel::prelude::*;
 use diesel::{result::Error, PgConnection};
 use serde::Deserialize;
 
@@ -30,11 +33,11 @@ impl Job {
             state: Some(self.state),
             num_cores: Some(self.num_cores),
             num_nodes: Some(self.num_nodes),
-            created_at: chrono::NaiveDate::from_ymd_opt(2010, 10, 10)
+            created_at: chrono::NaiveDate::from_ymd_opt(2022, 10, 10)
                 .expect("Failed to create date")
                 .and_hms_opt(0, 0, 0)
                 .expect("Failed to create date"),
-            updated_at: chrono::NaiveDate::from_ymd_opt(2010, 10, 10)
+            updated_at: chrono::NaiveDate::from_ymd_opt(2022, 10, 10)
                 .expect("Failed to create date")
                 .and_hms_opt(0, 0, 0)
                 .expect("Failed to create date"),
@@ -60,15 +63,15 @@ impl Member {
             user_id: self.user_id,
             project_id,
             owner: Some(self.owner),
-            login: Some(format!("Login {}", id)),
+            login: Some(format!("Login {}_{}", self.user_id, project_id)),
             project_access_state: match self.is_access_allowed {
                 true => Some("allowed".to_string()),
                 false => Some("suspended".to_string()),
             },
-            created_at: chrono::NaiveDate::from_ymd_opt(2010, 10, 10)
+            created_at: chrono::NaiveDate::from_ymd_opt(2022, 10, 10)
                 .expect("Failed to create date")
                 .and_hms_opt(0, 0, 0),
-            updated_at: chrono::NaiveDate::from_ymd_opt(2010, 10, 10)
+            updated_at: chrono::NaiveDate::from_ymd_opt(2022, 10, 10)
                 .expect("Failed to create date")
                 .and_hms_opt(0, 0, 0),
             organization_id: Some(self.organization_id),
@@ -95,10 +98,10 @@ impl Project {
                 true => Some("active".to_string()),
                 false => Some("finished".to_string()),
             },
-            created_at: chrono::NaiveDate::from_ymd_opt(2010, 10, 10)
+            created_at: chrono::NaiveDate::from_ymd_opt(2022, 10, 10)
                 .expect("Failed to create date")
                 .and_hms_opt(0, 0, 0),
-            updated_at: chrono::NaiveDate::from_ymd_opt(2010, 10, 10)
+            updated_at: chrono::NaiveDate::from_ymd_opt(2022, 10, 10)
                 .expect("Failed to create date")
                 .and_hms_opt(0, 0, 0),
             organization_id: Some(organization_id),
@@ -118,15 +121,47 @@ impl CoreOrganization {
             name: Some(format!("Organization {}", id)),
             abbreviation: Some(format!("ORG {}", id)),
             kind_id: None,
-            country_id: None, //Add mocking
+            country_id: None,
             city_id: None,
-            created_at: chrono::NaiveDate::from_ymd_opt(2010, 10, 10)
+            created_at: chrono::NaiveDate::from_ymd_opt(2022, 10, 10)
                 .expect("Failed to create date")
                 .and_hms_opt(0, 0, 0),
-            updated_at: chrono::NaiveDate::from_ymd_opt(2010, 10, 10)
+            updated_at: chrono::NaiveDate::from_ymd_opt(2022, 10, 10)
                 .expect("Failed to create date")
                 .and_hms_opt(0, 0, 0),
             checked: Some(true),
+        }
+    }
+}
+
+impl User {
+    pub fn generate_model(id: i32) -> Self {
+        Self {
+            id,
+            email: format!("email{}@octoshell.ru", id),
+            crypted_password: None,
+            salt: None,
+            created_at: chrono::NaiveDate::from_ymd_opt(2022, 10, 10)
+                .expect("Failed to create date")
+                .and_hms_opt(0, 0, 0),
+            updated_at: chrono::NaiveDate::from_ymd_opt(2022, 10, 10)
+                .expect("Failed to create date")
+                .and_hms_opt(0, 0, 0),
+            activation_state: None,
+            activation_token: None,
+            activation_token_expires_at: None,
+            remember_me_token: None,
+            remember_me_token_expires_at: None,
+            reset_password_token: None,
+            reset_password_token_expires_at: None,
+            reset_password_email_sent_at: None,
+            access_state: None,
+            deleted_at: None,
+            last_login_at: None,
+            last_logout_at: None,
+            last_activity_at: None,
+            last_login_from_ip_address: None,
+            language: None,
         }
     }
 }
@@ -136,37 +171,61 @@ pub struct GenParameters {
     projects: Vec<Project>,
 }
 
-const NUM_ORGANIZATIONS: i32 = 10;
-const NUM_USERS: i32 = 10;
-
 impl GenParameters {
     pub fn fill_database(self, connection: &mut PgConnection) -> Result<(), Error> {
-        let mut organizations = Vec::new();
         let mut projects = Vec::new();
         let mut members = Vec::new();
         let mut jobs = Vec::new();
 
-        for id in 0..NUM_ORGANIZATIONS {
-            organizations.push(CoreOrganization::generate_model(id));
-        }
+        let mut organizations = HashMap::<i32, CoreOrganization>::new();
+        let mut users = HashMap::<i32, User>::new();
+        let mut next_member_id = 0;
+        let mut next_job_id = 0;
 
         for (project_id, mut project) in self.projects.into_iter().enumerate() {
-            for (member_id, mut member) in project.members.drain(..).enumerate() {
-                for (job_id, job) in member.jobs.drain(..).enumerate() {
-                    jobs.push(job.generate_model(job_id as i32))
+            let org_id = project.members[0].organization_id;
+            for mut member in project.members.drain(..) {
+                if !users.contains_key(&member.organization_id) {
+                    let new_organization = CoreOrganization::generate_model(member.organization_id);
+                    organizations.insert(member.organization_id, new_organization);
                 }
-                members.push(member.generate_model(member_id as i32, project_id as i32));
+                if !organizations.contains_key(&member.user_id) {
+                    let new_user = User::generate_model(member.user_id);
+                    users.insert(member.user_id, new_user);
+                }
+                for job in member.jobs.drain(..) {
+                    jobs.push(job.generate_model(next_job_id));
+                    next_job_id += 1;
+                }
+                members.push(member.generate_model(next_member_id, project_id as i32));
+                next_member_id += 1;
             }
-            projects.push(project.generate_model(project_id as i32, 1));
+            projects.push(project.generate_model(project_id as i32, org_id));
         }
 
-        Ok(())
-    }
+        diesel::insert_into(crate::schema::core_projects::table)
+            .values(&projects)
+            .execute(connection)?;
 
-    pub fn create_from_json(path: &std::path::Path) -> Self {
-        let data = std::fs::read_to_string(path).expect("Unable to read file");
-        let projects = serde_json::from_str(&data).expect("Unable to deserialize");
-        Self { projects }
+        diesel::insert_into(crate::schema::core_members::table)
+            .values(&members)
+            .execute(connection)?;
+
+        diesel::insert_into(crate::schema::jobstat_jobs::table)
+            .values(&jobs)
+            .execute(connection)?;
+
+        let organizations: Vec<_> = organizations.values().collect();
+        diesel::insert_into(crate::schema::core_organizations::table)
+            .values(organizations)
+            .execute(connection)?;
+
+        let users: Vec<_> = users.values().collect();
+        diesel::insert_into(crate::schema::users::table)
+            .values(users)
+            .execute(connection)?;
+
+        Ok(())
     }
 }
 
@@ -238,11 +297,11 @@ mod tests {
         assert_eq!(member, sample_member);
     }
 
-
     #[test]
     fn test_project_deserialize() {
         let data = r#"
         {
+            "__comment": "Student's practicum",
             "is_active": false,
             "activation_time": "2002-05-01T00:00:00",
             "finish_time": "2002-07-01T00:00:00",
@@ -286,13 +345,19 @@ mod tests {
         };
         let sample_project = Project {
             is_active: false,
-            activation_time: NaiveDateTime::parse_from_str("01.05.2002 00:00:00", "%d.%m.%Y %H:%M:%S")
-                .expect("Failed to parse from str"),
+            activation_time: NaiveDateTime::parse_from_str(
+                "01.05.2002 00:00:00",
+                "%d.%m.%Y %H:%M:%S",
+            )
+            .expect("Failed to parse from str"),
             finish_time: NaiveDateTime::parse_from_str("01.07.2002 00:00:00", "%d.%m.%Y %H:%M:%S")
                 .expect("Failed to parse from str"),
-            estimated_finish_time: NaiveDateTime::parse_from_str("01.06.2002 00:00:00", "%d.%m.%Y %H:%M:%S")
-                .expect("Failed to parse from str"),
-            members: vec![sample_member]
+            estimated_finish_time: NaiveDateTime::parse_from_str(
+                "01.06.2002 00:00:00",
+                "%d.%m.%Y %H:%M:%S",
+            )
+            .expect("Failed to parse from str"),
+            members: vec![sample_member],
         };
         assert_eq!(project, sample_project);
     }
