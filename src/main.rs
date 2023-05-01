@@ -31,8 +31,6 @@ pub fn clear_database(connection: &mut PgConnection, tables_names: &[&str]) {
             .execute(connection)
             .expect(&("Error truncating the table".to_owned() + table_name));
     }
-
-    
 }
 
 fn main() {

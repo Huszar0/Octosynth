@@ -249,7 +249,34 @@ impl Mockable for CoreCountry {
     }
 }
 
+macro_rules! depersonalize {
+    ($conn_in:expr, $table_in:expr, $conn_out:expr, $table_out:expr, $model:ty, $shift_gen:expr) => {
+        let records = $table_in
+            .load::<$model>($conn_in)
+            .expect("Failed to load jobstat_jobs");
+        let deperson_records: Vec<_> = records
+            .into_iter()
+            .map(|job| job.mock(&$shift_gen))
+            .collect();
 
+        let size_of_batch = 2000;
+        let mut left_border = 0;
+
+        for _ in 0..(deperson_records.len() / size_of_batch + 1) {
+            let mut right_border = left_border + size_of_batch;
+            if right_border > deperson_records.len() {
+                right_border = deperson_records.len();
+            }
+
+            diesel::insert_into($table_out)
+                .values(&deperson_records[left_border..right_border])
+                .execute($conn_out)
+                .expect("Error saving to new database");
+
+            left_border += size_of_batch;
+        }
+    };
+}
 
 pub fn fill_database(
     connection_in: &mut PgConnection,
@@ -267,137 +294,93 @@ pub fn fill_database(
     use crate::schema::jobstat_jobs::dsl::*;
     use crate::schema::jobstat_string_data::dsl::*;
 
-    let records = jobstat_jobs
-        .load::<JobstatJob>(connection_in)
-        .expect("Failed to load jobstat_jobs");
-    let deperson_records: Vec<_> = records
-        .into_iter()
-        .map(|record| record.mock(&shift_gen))
-        .collect();
+    depersonalize!(
+        connection_in,
+        jobstat_jobs,
+        connection_out,
+        crate::schema::jobstat_jobs::table,
+        JobstatJob,
+        shift_gen
+    );
 
-    let size_of_batch = 2000;
-    let mut left_border = 0;
-    for _ in 0..(deperson_records.len() / size_of_batch + 1) {
-        let mut right_border = left_border + size_of_batch;
-        if right_border > deperson_records.len() {
-            right_border = deperson_records.len();
-        }
+    depersonalize!(
+        connection_in,
+        core_projects,
+        connection_out,
+        crate::schema::core_projects::table,
+        CoreProject,
+        shift_gen
+    );
 
-        diesel::insert_into(crate::schema::jobstat_jobs::table)
-            .values(&deperson_records[left_border..right_border])
-            .execute(connection_out)
-            .expect("Error saving to new database");
+    depersonalize!(
+        connection_in,
+        core_members,
+        connection_out,
+        crate::schema::core_members::table,
+        CoreMember,
+        shift_gen
+    );
 
-        left_border += size_of_batch;
-    }
+    depersonalize!(
+        connection_in,
+        core_organizations,
+        connection_out,
+        crate::schema::core_organizations::table,
+        CoreOrganization,
+        shift_gen
+    );
 
+    depersonalize!(
+        connection_in,
+        core_organization_kinds,
+        connection_out,
+        crate::schema::core_organization_kinds::table,
+        CoreOrganizationKind,
+        shift_gen
+    );
 
-    let records = core_projects
-        .load::<CoreProject>(connection_in)
-        .expect("Failed to load jobstat_jobs");
-    let deperson_records: Vec<_> = records
-        .into_iter()
-        .map(|job| job.mock(&shift_gen))
-        .collect();
-    diesel::insert_into(crate::schema::core_projects::table)
-        .values(&deperson_records)
-        .execute(connection_out)
-        .expect("Error saving to new database");
+    depersonalize!(
+        connection_in,
+        core_organization_departments,
+        connection_out,
+        crate::schema::core_organization_departments::table,
+        CoreOrganizationDepartment,
+        shift_gen
+    );
 
-    let records = core_members
-        .load::<CoreMember>(connection_in)
-        .expect("Failed to load jobstat_jobs");
-    let deperson_records: Vec<_> = records
-        .into_iter()
-        .map(|job| job.mock(&shift_gen))
-        .collect();
-    diesel::insert_into(crate::schema::core_members::table)
-        .values(&deperson_records)
-        .execute(connection_out)
-        .expect("Error saving to new database");
+    depersonalize!(
+        connection_in,
+        core_cities,
+        connection_out,
+        crate::schema::core_cities::table,
+        CoreCity,
+        shift_gen
+    );
 
-    let records = core_organizations
-        .load::<CoreOrganization>(connection_in)
-        .expect("Failed to load jobstat_jobs");
-    let deperson_records: Vec<_> = records
-        .into_iter()
-        .map(|job| job.mock(&shift_gen))
-        .collect();
-    diesel::insert_into(crate::schema::core_organizations::table)
-        .values(&deperson_records)
-        .execute(connection_out)
-        .expect("Error saving to new database");
+    depersonalize!(
+        connection_in,
+        core_countries,
+        connection_out,
+        crate::schema::core_countries::table,
+        CoreCountry,
+        shift_gen
+    );
 
-    let records = core_organization_kinds
-        .load::<CoreOrganizationKind>(connection_in)
-        .expect("Failed to load jobstat_jobs");
-    let deperson_records: Vec<_> = records
-        .into_iter()
-        .map(|job| job.mock(&shift_gen))
-        .collect();
-    diesel::insert_into(crate::schema::core_organization_kinds::table)
-        .values(&deperson_records)
-        .execute(connection_out)
-        .expect("Error saving to new database");
+    depersonalize!(
+        connection_in,
+        jobstat_float_data,
+        connection_out,
+        crate::schema::jobstat_float_data::table,
+        JobstatFloatData,
+        shift_gen
+    );
 
-    let records = core_organization_departments
-        .load::<CoreOrganizationDepartment>(connection_in)
-        .expect("Failed to load jobstat_jobs");
-    let deperson_records: Vec<_> = records
-        .into_iter()
-        .map(|job| job.mock(&shift_gen))
-        .collect();
-    diesel::insert_into(crate::schema::core_organization_departments::table)
-        .values(&deperson_records)
-        .execute(connection_out)
-        .expect("Error saving to new database");
-
-    let records = core_cities
-        .load::<CoreCity>(connection_in)
-        .expect("Failed to load jobstat_jobs");
-    let deperson_records: Vec<_> = records
-        .into_iter()
-        .map(|job| job.mock(&shift_gen))
-        .collect();
-    diesel::insert_into(crate::schema::core_cities::table)
-        .values(&deperson_records)
-        .execute(connection_out)
-        .expect("Error saving to new database");
-
-    let records = core_countries
-        .load::<CoreCountry>(connection_in)
-        .expect("Failed to load jobstat_jobs");
-    let deperson_records: Vec<_> = records
-        .into_iter()
-        .map(|job| job.mock(&shift_gen))
-        .collect();
-    diesel::insert_into(crate::schema::core_countries::table)
-        .values(&deperson_records)
-        .execute(connection_out)
-        .expect("Error saving to new database");
-
-    let records = jobstat_float_data
-        .load::<JobstatFloatData>(connection_in)
-        .expect("Failed to load jobstat_jobs");
-    let deperson_records: Vec<_> = records
-        .into_iter()
-        .map(|job| job.mock(&shift_gen))
-        .collect();
-
-    diesel::insert_into(crate::schema::jobstat_float_data::table)
-        .values(&deperson_records)
-        .execute(connection_out)
-        .expect("Error saving to new database");
-
-    let records = jobstat_string_data
-        .load::<JobstatStringData>(connection_in)
-        .expect("Failed to load jobstat_jobs");
-    let deperson_records: Vec<_> = records
-        .into_iter()
-        .map(|job| job.mock(&shift_gen))
-        .collect();
-    diesel::insert_into(crate::schema::jobstat_string_data::table)
-        .values(&deperson_records)
-        .execute(connection_out)
-        .expect("Error saving to new database");
+    depersonalize!(
+        connection_in,
+        jobstat_string_data,
+        connection_out,
+        crate::schema::jobstat_string_data::table,
+        JobstatStringData,
+        shift_gen
+    );
 }
