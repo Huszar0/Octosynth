@@ -17,13 +17,13 @@ struct Job {
 }
 
 impl Job {
-    pub fn generate_model(self, id: i32) -> JobstatJob {
+    pub fn generate_model(self, id: i32, member_id: i32, project_id: i32) -> JobstatJob {
         JobstatJob {
             id,
             cluster: Some("test_cluster".to_string()),
             drms_job_id: None,
             drms_task_id: None,
-            login: Some(format!("Login {}", id)),
+            login: Some(format!("Login {}_{}", member_id, project_id)),
             partition: Some("test".to_string()),
             submit_time: None,
             start_time: Some(self.start_time),
@@ -194,7 +194,7 @@ impl GenParameters {
                     users.insert(member.user_id, new_user);
                 }
                 for job in member.jobs.drain(..) {
-                    jobs.push(job.generate_model(next_job_id));
+                    jobs.push(job.generate_model(next_job_id, member.user_id, project_id as i32));
                     next_job_id += 1;
                 }
                 members.push(member.generate_model(next_member_id, project_id as i32));
